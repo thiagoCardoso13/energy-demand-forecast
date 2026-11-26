@@ -31,7 +31,7 @@ def breakdown(results: pd.DataFrame, by: str) -> pd.DataFrame:
     if by == "hour":
         keys = local.hour
     elif by == "weekday":
-        keys = local.dayofweek
+        keys = local.day_of_week
     elif by == "month":
         keys = local.strftime("%Y-%m")
     elif by == "holiday":

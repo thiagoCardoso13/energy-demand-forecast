@@ -1,3 +1,4 @@
 pandas>=2.2
 pyarrow>=17
 holidays>=0.50
+scikit-learn>=1.5

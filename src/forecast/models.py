@@ -1,16 +1,23 @@
 """Forecasting models.
 
-A model is a function `(history, targets) -> predictions`: `history` is the hourly demand known at
-issue time and `targets` are the UTC hours to predict.
+A model has `fit(history, temperature)` and `predict(history, temperature, targets)`. `history` is
+the hourly demand known at that moment, `temperature` the day-ahead temperature forecast and
+`targets` the UTC hours to predict.
 """
 
-from collections.abc import Callable
+from typing import Protocol
 
 import pandas as pd
 
 from forecast.timeutils import MADRID
 
-Model = Callable[[pd.Series, pd.DatetimeIndex], pd.Series]
+
+class Model(Protocol):
+    def fit(self, history: pd.Series, temperature: pd.Series) -> None: ...
+
+    def predict(
+        self, history: pd.Series, temperature: pd.Series, targets: pd.DatetimeIndex
+    ) -> pd.Series: ...
 
 
 def weeks_earlier(targets: pd.DatetimeIndex, weeks: int) -> pd.DatetimeIndex:
@@ -31,3 +38,13 @@ def seasonal_naive(history: pd.Series, targets: pd.DatetimeIndex) -> pd.Series:
         earlier = pd.Series(history.reindex(weeks_earlier(targets, weeks)).to_numpy(), targets)
         result = result.fillna(earlier)
     return result
+
+
+class SeasonalNaive:
+    def fit(self, history: pd.Series, temperature: pd.Series) -> None:
+        pass
+
+    def predict(
+        self, history: pd.Series, temperature: pd.Series, targets: pd.DatetimeIndex
+    ) -> pd.Series:
+        return seasonal_naive(history, targets)

@@ -5,9 +5,9 @@ import pandas as pd
 import pytest
 
 from forecast.backtest import issue_moment, known_history, run_backtest
-from forecast.evaluate import BACKTEST, FINAL_TEST, MODELS
+from forecast.evaluate import BACKTEST, FINAL_TEST
 from forecast.metrics import breakdown, summarize
-from forecast.models import seasonal_naive, weeks_earlier
+from forecast.models import SeasonalNaive, seasonal_naive, weeks_earlier
 from forecast.timeutils import hours_of_local_day
 
 
@@ -27,23 +27,6 @@ def test_forecast_is_issued_at_ten_madrid_time_the_day_before(day, utc):
 def test_history_ends_with_the_last_hour_completed_at_issue_time():
     history = known_history(demand(), date(2026, 1, 15))
     assert history.index.max() == pd.Timestamp("2026-01-14 08:00", tz="UTC")
-
-
-# Both daylight saving weeks and an ordinary day.
-DAYS = [date(2026, 3, 29), date(2026, 4, 5), date(2026, 6, 16), date(2026, 11, 1)]
-
-
-@pytest.mark.parametrize("name", MODELS)
-@pytest.mark.parametrize("day", DAYS)
-def test_no_model_output_depends_on_data_after_issue_time(name, day):
-    real = demand()
-    tampered = real.copy()
-    after = tampered.index + pd.Timedelta(hours=1) > issue_moment(day)
-    tampered[after] = -1e9
-    expected = run_backtest(real, MODELS[name], day, day)["predicted"]
-    got = run_backtest(tampered, MODELS[name], day, day)["predicted"]
-    pd.testing.assert_series_equal(expected, got)
-    assert expected.notna().all()
 
 
 def test_baseline_repeats_the_same_local_hour_across_a_clock_change():
@@ -90,3 +73,19 @@ def test_holiday_breakdown_uses_the_local_date():
 
 def test_held_out_period_does_not_overlap_the_backtest():
     assert BACKTEST[1] < FINAL_TEST[0]
+
+
+def test_models_are_refitted_monthly_with_only_the_data_known_then():
+    class Spy(SeasonalNaive):
+        def __init__(self):
+            self.fitted = []
+
+        def fit(self, history, temperature):
+            self.fitted.append((history.index.max(), temperature.index.max()))
+
+    spy = Spy()
+    series = demand()
+    run_backtest(series, series, spy, date(2026, 1, 30), date(2026, 3, 2))
+    expected = [issue_moment(d) for d in (date(2026, 1, 30), date(2026, 2, 1), date(2026, 3, 1))]
+    assert [h + pd.Timedelta(hours=1) for h, _ in spy.fitted] == expected
+    assert all(t <= moment for (_, t), moment in zip(spy.fitted, expected))

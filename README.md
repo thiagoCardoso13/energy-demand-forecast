@@ -2,8 +2,16 @@
 
 Day-ahead forecast of Spain's hourly electricity demand, evaluated against simple baselines.
 
-**Status:** early work. So far there is only the baseline (same hour one week earlier):
-MAPE 4.16% over 2025-09 to 2026-08. See [Evaluation](docs/evaluation.md).
+**Status:** models compared; no daily pipeline or demo yet. Backtest over 2025-09 to 2026-08:
+
+| Model | MAPE |
+|---|---|
+| Baseline (same hour one week earlier) | 4.16% |
+| Linear regression per hour | 3.07% |
+| Gradient boosting | 2.55% |
+| Gradient boosting on the weekly change | 2.51% |
+
+See [Evaluation](docs/evaluation.md) and [Model notes](docs/models.md).
 
 - [Plan](docs/PLAN.md)
 - [Data notes](docs/DATA.md)

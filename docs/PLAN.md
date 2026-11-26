@@ -47,7 +47,7 @@ Phase 0 results are in [DATA.md](DATA.md).
 
 1. **Baseline:** same hour one week earlier.
 2. **Linear regression** with calendar, lag and temperature features.
-3. **Gradient boosting** (LightGBM).
+3. **Gradient boosting** (scikit-learn, see [models.md](models.md)).
 4. Optional: SARIMAX or Prophet for comparison.
 
 A more complex model is kept only if it beats the simpler one in the backtest.
@@ -65,7 +65,7 @@ A more complex model is kept only if it beats the simpler one in the backtest.
 |---|---|
 | Language | Python 3.12 |
 | Data | pandas, Parquet files |
-| Models | scikit-learn, LightGBM |
+| Models | scikit-learn |
 | Tracking | MLflow, local (results exported to `docs/evaluation.md`) |
 | API | FastAPI |
 | Dashboard | Streamlit, Streamlit Community Cloud |
