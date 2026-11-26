@@ -55,7 +55,7 @@ A more complex model is kept only if it beats the simpler one in the backtest.
 ## Evaluation
 
 - Rolling-origin backtest over the last 12 months, retraining monthly.
-- A final untouched test period, used once.
+- A final untouched test period (2026-09-01 to 2026-11-25), used once. The backtest year is 2025-09-01 to 2026-08-31.
 - Metrics: MAPE and MAE (MW), also split by hour, weekday, month and holiday.
 - REE's `Prevista` is shown as an external reference only, with the caveat above. No claim of beating it unless the comparison is on equal terms.
 

@@ -2,7 +2,8 @@
 
 Day-ahead forecast of Spain's hourly electricity demand, evaluated against simple baselines.
 
-**Status:** early work. There is no model yet.
+**Status:** early work. So far there is only the baseline (same hour one week earlier):
+MAPE 4.16% over 2025-09 to 2026-08. See [Evaluation](docs/evaluation.md).
 
 - [Plan](docs/PLAN.md)
 - [Data notes](docs/DATA.md)
@@ -11,6 +12,12 @@ Day-ahead forecast of Spain's hourly electricity demand, evaluated against simpl
 python3.12 -m venv .venv
 .venv/bin/pip install -r requirements-dev.txt
 .venv/bin/pytest
+```
+
+## Backtest
+
+```bash
+PYTHONPATH=src .venv/bin/python -m forecast.evaluate
 ```
 
 ## Data
