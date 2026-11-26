@@ -127,6 +127,8 @@ def run(
     target = today + timedelta(days=1)
 
     def save() -> None:
+        if predictions.empty:
+            return
         path.parent.mkdir(parents=True, exist_ok=True)
         predictions.to_csv(path, index=False)
 

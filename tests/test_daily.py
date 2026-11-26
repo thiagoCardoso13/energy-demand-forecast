@@ -61,6 +61,7 @@ def test_data_after_issue_time_does_not_change_the_forecast():
 def test_refuses_to_forecast_before_issue_time(tmp_path):
     with pytest.raises(ValueError, match="too early"):
         daily(tmp_path, "2026-02-10 08:00")
+    assert not (tmp_path / "predictions.csv").exists()
 
 
 def test_stale_data_fails_but_keeps_what_was_recorded(tmp_path):
