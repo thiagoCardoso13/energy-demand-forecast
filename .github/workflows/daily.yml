@@ -1,0 +1,46 @@
+name: Daily forecast
+on:
+  schedule:
+    # 10:00 Madrid is 09:00 UTC in winter and 08:00 UTC in summer. The second run is a retry.
+    - cron: "17 9 * * *"
+    - cron: "47 12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-forecast
+  cancel-in-progress: false
+
+jobs:
+  forecast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements*.txt
+      - run: pip install -r requirements.txt
+      - run: python -m forecast.daily
+        env:
+          PYTHONPATH: src
+      - name: Commit the results
+        # Also after a failure, so that actual values already fetched are kept.
+        if: ${{ !cancelled() }}
+        run: |
+          [ -f data/predictions.csv ] || exit 0
+          git config user.name "Thiago Bastos"
+          git config user.email "98676372+thiagoCardoso13@users.noreply.github.com"
+          git add data/predictions.csv
+          # The data snapshot is refreshed monthly, to keep the repository small.
+          if [ "$(TZ=Europe/Madrid date +%d)" = "01" ]; then
+            git add data/demand.parquet data/temperature.parquet
+          fi
+          git diff --cached --quiet && exit 0
+          git commit -m "data: daily forecast $(TZ=Europe/Madrid date +%F)"
+          git pull --rebase --autostash
+          git push

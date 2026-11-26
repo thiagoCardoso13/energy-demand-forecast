@@ -2,7 +2,8 @@
 
 Day-ahead forecast of Spain's hourly electricity demand, evaluated against simple baselines.
 
-**Status:** models compared; no daily pipeline or demo yet. Backtest over 2025-09 to 2026-08:
+**Status:** a [daily pipeline](docs/pipeline.md) records tomorrow's forecast in
+`data/predictions.csv`; no demo yet. Backtest over 2025-09 to 2026-08:
 
 | Model | MAPE |
 |---|---|
