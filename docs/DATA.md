@@ -1,6 +1,6 @@
 # Data notes
 
-Checked on 2026-11-26. The demand figures come from `python scripts/explore.py` (2019-01-01 to 2026-11-25).
+Checked on 2026-11-26. The demand figures below come from `python scripts/explore.py` (2019-01-01 to 2026-11-25).
 The geography, `Prevista` and weather checks were separate one-off requests.
 
 ## Demand (`demanda-tiempo-real`, series `Real`)
@@ -64,4 +64,16 @@ forecast made 24 hours before each hour, so for the afternoon of D+1 it would no
 ## Still open
 
 - When `Prevista` is published and revised.
-- Which cities and weights to use for temperature.
+
+## Temperature cities (decided in phase 1)
+
+Madrid, Barcelona, Valencia, Sevilla, Málaga, Bilbao and Zaragoza, weighted by rough metropolitan
+population (`src/forecast/weather.py`). The weights are approximations and no island city is included.
+An hour with any city missing is empty.
+
+## Stored tables (first full run, 2026-11-26)
+
+| File | Hours | Empty | Period (UTC) |
+|---|---|---|---|
+| `data/demand.parquet` | 69,287 | 227 | 2018-12-31 23:00 to 2026-11-26 21:00 |
+| `data/temperature.parquet` | 49,776 | 516 | 2021-03-25 00:00 to 2026-11-27 23:00 |

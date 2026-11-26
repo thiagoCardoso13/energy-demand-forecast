@@ -12,3 +12,18 @@ python3.12 -m venv .venv
 .venv/bin/pip install -r requirements-dev.txt
 .venv/bin/pytest
 ```
+
+## Data
+
+```bash
+PYTHONPATH=src .venv/bin/python -m forecast.ingest
+```
+
+Writes two hourly tables indexed in UTC, and on later runs downloads only recent days:
+
+| File | Column | Source |
+|---|---|---|
+| `data/demand.parquet` | `demand_mw` | [Red Eléctrica](https://www.ree.es/en/datos/apidata), REData API |
+| `data/temperature.parquet` | `temperature_c` | [Open-Meteo](https://open-meteo.com/) (CC BY 4.0), two-day-ahead forecast, population-weighted |
+
+A missing hour is stored as an empty value. Nothing is interpolated.
