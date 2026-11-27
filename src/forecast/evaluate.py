@@ -10,6 +10,7 @@ from pathlib import Path
 import pandas as pd
 
 from forecast.backtest import run_backtest
+from forecast.daily import MODEL_NAME
 from forecast.learned import GradientBoosting, HourlyRidge
 from forecast.metrics import breakdown, summarize
 from forecast.models import SeasonalNaive
@@ -47,6 +48,20 @@ def run_all(demand: pd.Series, temperature: pd.Series) -> dict[str, pd.DataFrame
         results[name] = run_backtest(demand, temperature, cls(**params), *BACKTEST)
         print(f"{name}: MAPE {summarize(results[name])['mape_pct']:.2f}%", flush=True)
     return results
+
+
+def backtest_table(results: dict[str, pd.DataFrame]) -> pd.DataFrame:
+    """Hourly backtest of the daily model and the baseline, shown by the dashboard."""
+    model = results[MODEL_NAME]
+    table = pd.DataFrame(
+        {
+            "actual_mw": model["actual"],
+            "predicted_mw": model["predicted"],
+            "baseline_mw": results["seasonal_naive"]["predicted"],
+        }
+    ).round(1)
+    table.index.name = "target_utc"
+    return table
 
 
 def log_to_mlflow(results: dict[str, pd.DataFrame]) -> None:
@@ -123,6 +138,7 @@ def main() -> None:
     if args.mlflow:
         log_to_mlflow(results)
     Path("docs/evaluation.md").write_text(report(results))
+    backtest_table(results).to_csv("data/backtest.csv")
 
 
 if __name__ == "__main__":
