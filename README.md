@@ -3,7 +3,9 @@
 Day-ahead forecast of Spain's hourly electricity demand, evaluated against simple baselines.
 
 **Status:** a [daily pipeline](docs/pipeline.md) records tomorrow's forecast in
-`data/predictions.csv`. A dashboard and an API run locally; there is no public demo yet. Backtest over 2025-09 to 2026-08:
+`data/predictions.csv`. The API runs locally.
+
+**Live dashboard:** <https://energy-demand-forecast-pz2daz6h6ksbmcszecf7nl.streamlit.app/> (free hosting: if it is asleep, it takes a while to wake up). Backtest over 2025-09 to 2026-08:
 
 | Model | MAPE |
 |---|---|

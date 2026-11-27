@@ -2,6 +2,8 @@
 
 Streamlit Community Cloud, free. No secrets or API keys are needed.
 
+Deployed on 2026-11-27: <https://energy-demand-forecast-pz2daz6h6ksbmcszecf7nl.streamlit.app/>
+
 1. Go to <https://share.streamlit.io>, sign in with GitHub and choose to create an app from a repository.
 2. Fill in:
 
