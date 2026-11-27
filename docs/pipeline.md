@@ -1,6 +1,6 @@
 # Daily pipeline
 
-`.github/workflows/daily.yml` runs `python -m forecast.daily` at 09:17 UTC, with a retry at 12:47 UTC.
+`.github/workflows/daily.yml` runs `python -m forecast.daily` at 09:17 UTC, with further attempts at 10:37, 12:47, 15:23 and 18:53 UTC.
 It can also be started by hand from the Actions tab.
 
 Each run:
@@ -17,8 +17,8 @@ Each run:
 - The first forecast recorded for a day is never replaced.
 - A forecast made on or after its target day (Madrid time) is not counted in the live error.
 - No forecast is made if demand data ends more than 6 hours before the 10:00 cutoff, or if the
-  temperature forecast for the day is incomplete. The run fails, and the retry tries again.
-- If both runs fail or GitHub skips them, that day has no forecast. It is not filled in afterwards by
+  temperature forecast for the day is incomplete. The run fails, and a later run tries again.
+- If every run of a day fails or is skipped by GitHub, that day has no forecast. It is not filled in afterwards by
   the schedule.
 
 ## Repository size

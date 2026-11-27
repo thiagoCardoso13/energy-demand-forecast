@@ -1,9 +1,14 @@
 name: Daily forecast
 on:
   schedule:
-    # 10:00 Madrid is 09:00 UTC in winter and 08:00 UTC in summer. The second run is a retry.
+    # 10:00 Madrid is 09:00 UTC in winter and 08:00 UTC in summer.
+    # GitHub may delay or skip a scheduled run, so there are several. Once a day's forecast
+    # is recorded, later runs only fill in actual values.
     - cron: "17 9 * * *"
+    - cron: "37 10 * * *"
     - cron: "47 12 * * *"
+    - cron: "23 15 * * *"
+    - cron: "53 18 * * *"
   workflow_dispatch:
 
 permissions:
