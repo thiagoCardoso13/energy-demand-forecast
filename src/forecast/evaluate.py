@@ -90,7 +90,7 @@ def report(results: dict[str, pd.DataFrame]) -> str:
         "",
         f"Backtest: every day from {first} to {last}, forecast issued at 10:00 Europe/Madrid on",
         "the day before, models refitted monthly. The period",
-        f"{FINAL_TEST[0]} to {FINAL_TEST[1]} is held out and has not been evaluated.",
+        f"{FINAL_TEST[0]} to {FINAL_TEST[1]} is held out, see [final_test.md](final_test.md).",
         "The 2025-04-28 blackout is outside both periods and is hidden from training and lags.",
         "",
         "## Models",

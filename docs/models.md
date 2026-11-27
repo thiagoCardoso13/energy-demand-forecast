@@ -28,6 +28,11 @@ development machine. scikit-learn's histogram gradient boosting uses the same te
 - REE's `Prevista` had a 1.37% MAPE on 2025 5-minute data (see [DATA.md](DATA.md)). That is a different
   period and an unknown issue time, so it is not comparable, but this project does not claim to match it.
 
+## Held-out test
+
+Run once on 2026-11-27, see [final_test.md](final_test.md): 2.70% MAPE against 4.94% for the
+baseline. No model setting was changed after seeing it.
+
 ## Tracking
 
 ```bash
@@ -45,4 +50,3 @@ Runs are stored in a local `mlflow.db` (not committed). Browse them with
 
 - SARIMAX or Prophet (optional in the plan).
 - Regional holidays.
-- The held-out period has not been evaluated.

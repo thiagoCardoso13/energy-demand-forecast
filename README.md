@@ -12,6 +12,9 @@ Day-ahead forecast of Spain's hourly electricity demand, evaluated against simpl
 | Gradient boosting | 2.55% |
 | Gradient boosting on the weekly change | 2.51% |
 
+On the [held-out test](docs/final_test.md) (2026-09-01 to 2026-11-25, run once) the chosen model had
+**2.70% MAPE**, against 4.94% for the baseline.
+
 See [Evaluation](docs/evaluation.md) and [Model notes](docs/models.md).
 
 - [Plan](docs/PLAN.md)
