@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 
 from api.main import app, data_dir
 from forecast.daily import COLUMNS
-from forecast.serving import daily_errors, day_view
+from forecast.serving import daily_errors, data_updated_until, day_view
 
 
 def predictions(day: str = "2026-02-11", actual: float | None = 100.0) -> pd.DataFrame:
@@ -21,6 +21,12 @@ def predictions(day: str = "2026-02-11", actual: float | None = 100.0) -> pd.Dat
             "model": "boosting_weekly_change",
         }
     )[COLUMNS]
+
+
+def test_data_date_is_the_latest_of_history_and_actuals():
+    # Actuals run to the end of 11 February; without them only the history before issue is known.
+    assert data_updated_until(predictions()) == "2026-02-12 00:00"
+    assert data_updated_until(predictions(actual=None)) == "2026-02-10 10:00"
 
 
 @pytest.fixture
@@ -51,6 +57,7 @@ def test_api_returns_the_latest_day_by_default(client):
     )
     body = api.get("/forecast").json()
     assert body["day"] == "2026-02-12"
+    assert body["demand_source"] == "Red Eléctrica"
     assert len(body["hours"]) == 24
     assert body["hours"][0]["actual_mw"] is None
     assert api.get("/forecast", params={"day": "2026-02-11"}).json()["hours"][0]["actual_mw"] == 100

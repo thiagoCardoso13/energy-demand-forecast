@@ -14,6 +14,7 @@ import streamlit as st  # noqa: E402
 
 from forecast.serving import (  # noqa: E402
     daily_errors,
+    data_updated_until,
     day_view,
     load_backtest,
     load_live,
@@ -63,7 +64,8 @@ st.set_page_config(page_title="Spain electricity demand forecast", layout="wide"
 st.title("Spain electricity demand: day-ahead forecast")
 st.caption(
     "Each day, tomorrow's hourly demand is forecast with what is known at 10:00 Madrid time. "
-    "Sources: Red Eléctrica (demand), Open-Meteo (temperature forecast, CC BY 4.0)."
+    "Sources: Red Eléctrica (demand), Open-Meteo (temperature forecast, CC BY 4.0). "
+    "Non-commercial portfolio project, not affiliated with or endorsed by Red Eléctrica."
 )
 
 # Until a live forecast exists, open on the backtest so the page has something to show.
@@ -77,6 +79,11 @@ if source == BACKTEST:
 if table.empty:
     st.warning("No live forecast has been recorded yet. The backtest shows past performance.")
     st.stop()
+
+st.caption(
+    f"Demand data (source: Red Eléctrica) last updated up to {data_updated_until(table)}, "
+    "Madrid time."
+)
 
 days = sorted(table["target_day"].unique(), reverse=True)
 day = st.selectbox("Day", days)

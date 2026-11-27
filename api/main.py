@@ -10,7 +10,7 @@ import pandas as pd
 from fastapi import Depends, FastAPI, HTTPException
 
 from forecast.daily import on_time
-from forecast.serving import DATA, day_view, load_live
+from forecast.serving import DATA, data_updated_until, day_view, load_live
 
 app = FastAPI(
     title="Energy Demand Forecast",
@@ -44,6 +44,8 @@ def forecast(day: date | None = None, folder: Path = Depends(data_dir)) -> dict:
     first = rows.iloc[0]
     return {
         "day": wanted,
+        "demand_source": "Red Eléctrica",
+        "demand_data_until_madrid": data_updated_until(table),
         "model": first["model"],
         "made_at_utc": first["made_at_utc"],
         "made_before_target_day": bool(on_time(rows).all()),
