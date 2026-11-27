@@ -7,6 +7,8 @@ Day-ahead forecast of Spain's hourly electricity demand, evaluated against simpl
 
 **Live dashboard:** <https://energy-demand-forecast-pz2daz6h6ksbmcszecf7nl.streamlit.app/> (free hosting: if it is asleep, it takes a while to wake up). Backtest over 2025-09 to 2026-08:
 
+![Dashboard: live forecast, then the backtest with daily errors](docs/demo.gif)
+
 | Model | MAPE |
 |---|---|
 | Baseline (same hour one week earlier) | 4.16% |
